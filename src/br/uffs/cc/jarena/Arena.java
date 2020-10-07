@@ -2,7 +2,7 @@
  * Descreve uma arena para combate entre agentes. A arena contém uma lista com agentes
  * vivos e uma lista com os pontos de energia. Em cada iteração, todos os agentes vivos
  * são processados.
- * 
+ *
  * Fernando Bevilacqua <fernando.bevilacqua@uffs.edu.br>
  */
 
@@ -57,16 +57,16 @@ public class Arena implements Runnable {
 	private void adicionaAgentes() {
 		int i;
 
-		for (i = 0; i < 15; i++) {
-			adicionaEntidade(new AgenteDummy(0, 0, Constants.ENTIDADE_ENERGIA_INICIAL));						
-			adicionaEntidade(new AgenteInimigo((int)(Constants.LARGURA_TELA * 0.95), 0, Constants.ENTIDADE_ENERGIA_INICIAL));						
+		for (i = 0; i < 1; i++) {
+			adicionaEntidade(new Depressao(0, 0, Constants.ENTIDADE_ENERGIA_INICIAL));
+			adicionaEntidade(new AgenteInimigo((int)(Constants.LARGURA_TELA * 0.95), 0, Constants.ENTIDADE_ENERGIA_INICIAL));
 		}
 	}
 
 	private void adicionaPontosEnergia() {
 		double rand;
 		int i, j;
-		
+
 		j = Constants.ALTURA_TELA/Constants.PONTO_ENERGIA_QUANTIDADE;
 
 		for (i = 0; i < Constants.PONTO_ENERGIA_QUANTIDADE; i++) {
@@ -78,7 +78,7 @@ public class Arena implements Runnable {
 	public Vector<Entidade> getEntidades() {
 		return this.entidades;
 	}
-	
+
 	public Desenhista getDesenhista() {
 		return this.desenhista;
 	}
@@ -94,45 +94,45 @@ public class Arena implements Runnable {
 
 	public void run() {
 		long agora;
-		
+
 		horaInicio = System.currentTimeMillis();
-		
+
 		while (ativa) {
 			agora = System.currentTimeMillis();
-			
+
 			if ((agora - ultimoUpdate) >= intervaloUpdate) {
 				update();
 				ultimoUpdate = agora;
 			}
-			
+
 			processaTeclado();
 			estatistico.colheEstatisticas();
 			desenhista.render();
 		}
-		
+
 		estatistico.imprimeEstatisticas();
 		desenhista.terminate();
 	}
-	
+
 	public void termina() {
 		ativa = false;
 	}
-	
+
 	private void processaTeclado() {
 		if(teclado.isKeyDown(KeyEvent.VK_UP)) {
 			intervaloUpdate -= Constants.INTERVALO_UPDATE_INCREMENTO;
-			
+
 		} else if(teclado.isKeyDown(KeyEvent.VK_DOWN)) {
 			intervaloUpdate += Constants.INTERVALO_UPDATE_INCREMENTO;
-			
+
 		} else if(teclado.isKeyDown(KeyEvent.VK_RIGHT) || teclado.isKeyDown(KeyEvent.VK_LEFT)) {
 			intervaloUpdate = Constants.INTERVALO_UPDATE;
 		}
-		
+
 		if(teclado.isKeyDown(KeyEvent.VK_Q) || teclado.isKeyDown(KeyEvent.VK_ESCAPE)) {
 			termina();
 		}
-		
+
 		if(teclado.isKeyDown(KeyEvent.VK_D)) {
 			debug = true;
 		} else {
@@ -163,23 +163,23 @@ public class Arena implements Runnable {
 			entidades.removeAll(morrendo);
 			morrendo.removeAllElements();
 		}
-		
+
 		if(isFimCombate()) {
 			termina();
 		}
 	}
-	
+
 	private boolean isFimCombate() {
 		boolean temAlguemNascendo 	= nascendo.size() > 0;
 		boolean temAgentes 			= false;
-		
+
 		for(Entidade a : entidades) {
 			if(a instanceof Agente && !a.isMorta()) {
 				temAgentes = true;
 				break;
 			}
 		}
-		
+
 		return !temAgentes && !temAlguemNascendo;
 	}
 
@@ -203,7 +203,7 @@ public class Arena implements Runnable {
 
 			Entidade nova = construtor.newInstance(entidade.getX(), entidade.getY(), entidade.getEnergia());
 			agendaNascimento(nova);
-			
+
 			if(entidade instanceof Agente) {
 				estatistico.contabilizaDivisao((Agente)entidade);
 				desenhista.agenteClonou((Agente)entidade, (Agente)nova);
@@ -212,11 +212,11 @@ public class Arena implements Runnable {
 			System.out.println("Erro na hora de dividir a entidade!" + e.getMessage());
 		}
 	}
-	
+
 	public long getTimestampInicio() {
 		return horaInicio;
 	}
-	
+
 	public boolean isDebug() {
 		return debug;
 	}
