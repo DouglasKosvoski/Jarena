@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#compile
+javac ./src/br/uffs/cc/jarena/*.java ./src/br/uffs/cc/jarena/renders/simple2d/*.java -d bin/
+
+#run
+cd bin
+java br.uffs.cc.jarena.Main
+
+# return to root directory
+cd ..
