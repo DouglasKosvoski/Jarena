@@ -1,72 +1,111 @@
-/**
- * Um exemplo de agente que anda aleatoriamente na arena. Esse agente pode ser usado como base
- * para a criação de um agente mais esperto. Para mais informações sobre métodos que podem
- * ser utilizados, veja a classe Agente.java.
- *
- * Fernando Bevilacqua <fernando.bevilacqua@uffs.edu.br>
- */
-
 package br.uffs.cc.jarena;
 
 public class Depressao extends Agente
 {
 	int count = 0;
+	Boolean parar = false;
+	Boolean chegouDestino = false;
+	int group = this.getId() % 5;
 
 	public Depressao(Integer x, Integer y, Integer energia) {
 		super(x, y, energia);
 		setDirecao(this.NENHUMA_DIRECAO);
+		System.out.println("Group = " + this.group);
 	}
 
 
 	public void pensa() {
+		System.out.println("ID: " + this.getId() + " group: " + this.group + " || Posx: " + this.getX() + " : " + this.getY());
 		this.count++;
 
-		// System.out.println(this.getId());
-		// System.out.println(this.count);
-		// if(recebeuEnergia()) {
-		// 	setDirecao(this.NENHUMA_DIRECAO);
-		// }
-		// else {
-		MoveTowardsCenter();
-		// }
-	}
+		if(count % 5 == 0) {
+			this.parar = false;
+		}
 
-	public void MoveTowardsCenter() {
-		int[] Destino = {Constants.LARGURA_MAPA / 2, Constants.ALTURA_MAPA / 2};
-		int[] PlayerPos = {this.getX(), this.getY()};
+		Quad(this.group);
 
-		if(Destino == PlayerPos) {
+		if(parar) {
+			setDirecao(this.NENHUMA_DIRECAO);
 			return;
 		}
+	}
+
+	public void Quad(int quadrante) {
+		int[] PlayerPos = {this.getX(), this.getY()};
+		int[] Destino = {0,0};
+		int gap = Constants.LARGURA_MAPA / 6;
+
+		switch (quadrante) {
+			// Center
+			case 0:
+				Destino[0] = Constants.LARGURA_MAPA / 2;
+				Destino[1] = Constants.ALTURA_MAPA / 2;
+				break;
+			// upper right
+			case 1:
+				Destino[0] = Constants.LARGURA_MAPA - gap;
+				Destino[1] = Constants.ALTURA_MAPA / 3;
+				break;
+			// upper left
+			case 2:
+				Destino[0] = gap;
+				Destino[1] = Constants.ALTURA_MAPA / 3;
+				break;
+			// lower left
+			case 3:
+				Destino[0] = gap;
+				Destino[1] = Constants.ALTURA_MAPA - gap;
+				break;
+			// lower right
+			case 4:
+				Destino[0] = Constants.LARGURA_MAPA - gap;
+				Destino[1] = Constants.ALTURA_MAPA - gap;
+				break;
+			default:
+				setDirecao(this.NENHUMA_DIRECAO);
+				break;
+		}
+
+		if((Destino[0] == PlayerPos[0]) && (Destino[1] == PlayerPos[1]))
+			setDirecao(this.NENHUMA_DIRECAO);
+			// return true;
+
 		// Horizontal
 		if(this.count % 2 == 0) {
 			if(PlayerPos[0] < Destino[0]) {
-				System.out.println("ta na esquerda");
+				// System.out.println("indo Direita");
 				setDirecao(this.DIREITA);
 			}
-			else if(PlayerPos[0] > Destino[0]) {
-				System.out.println("ta na direita");
+			else if (PlayerPos[0] > Destino[0]) {
+				// System.out.println("indo esquerda");
 				setDirecao(this.ESQUERDA);
 			}
 		}
+		// Vertical
 		else {
-			// Vertical
 			if(PlayerPos[1] < Destino[1]) {
-				System.out.println("ta pra cima");
+				// System.out.println("indo baixo");
 				setDirecao(this.BAIXO);
 			}
 			else if(PlayerPos[1] > Destino[1]) {
-				System.out.println("ta pra baixo");
+				// System.out.println("indo cima");
 				setDirecao(this.CIMA);
 			}
 		}
 	}
 
+	public void goRandom() {
+		setDirecao(geraDirecaoAleatoria());
+	}
+
 	public void recebeuEnergia() {
-		// Invocado sempre que o agente recebe energia.
+		this.setDirecao(this.NENHUMA_DIRECAO);
+		this.parar = true;
+		this.count = 0;
 	}
 
 	public void tomouDano(int energiaRestanteInimigo) {
+		// moveTowardsCenter();
 		// Invocado quando o agente está na mesma posição que um agente inimigo
 		// e eles estão batalhando (ambos tomam dano).
 	}
