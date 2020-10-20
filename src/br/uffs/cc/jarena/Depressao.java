@@ -17,7 +17,6 @@ public class Depressao extends Agente
 	public void pensa() {
 		System.out.println("ID: " + this.getId() + " group: " + this.group + " || Posx: " + this.getX() + " : " + this.getY());
 		this.count++;
-
 		if(count % 5 == 0) {
 			this.parar = false;
 		}
@@ -33,7 +32,7 @@ public class Depressao extends Agente
 	public void Quad(int quadrante) {
 		int[] PlayerPos = {this.getX(), this.getY()};
 		int[] Destino = {0,0};
-		int gap = Constants.LARGURA_MAPA / 6;
+		int gap = 145;
 
 		switch (quadrante) {
 			// Center
@@ -66,36 +65,31 @@ public class Depressao extends Agente
 				break;
 		}
 
+		System.out.println("Destino = " + Destino[0] + " " + Destino[1]);
+		System.out.println("gap = " + gap);
+
+
 		if((Destino[0] == PlayerPos[0]) && (Destino[1] == PlayerPos[1]))
 			setDirecao(this.NENHUMA_DIRECAO);
-			// return true;
 
 		// Horizontal
 		if(this.count % 2 == 0) {
 			if(PlayerPos[0] < Destino[0]) {
-				// System.out.println("indo Direita");
 				setDirecao(this.DIREITA);
 			}
 			else if (PlayerPos[0] > Destino[0]) {
-				// System.out.println("indo esquerda");
 				setDirecao(this.ESQUERDA);
 			}
 		}
 		// Vertical
 		else {
 			if(PlayerPos[1] < Destino[1]) {
-				// System.out.println("indo baixo");
 				setDirecao(this.BAIXO);
 			}
 			else if(PlayerPos[1] > Destino[1]) {
-				// System.out.println("indo cima");
 				setDirecao(this.CIMA);
 			}
 		}
-	}
-
-	public void goRandom() {
-		setDirecao(geraDirecaoAleatoria());
 	}
 
 	public void recebeuEnergia() {
