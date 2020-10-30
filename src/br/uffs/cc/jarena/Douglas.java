@@ -19,7 +19,7 @@ public class Douglas extends Agente
 	// ex: se o cycleCounter for par se move na horizontal se nao na vertical
 	int cycleCounter = 0;
 	// Atribui cada agente para um de 5 grupos
-	int group = this.getId() % 15;
+	int group = this.getId() % 9;
 	// controla quando o player chegou ao seu destino ou se esta recebendo energia
 	Boolean parar = false;
 	Boolean chegouDestino = false;
@@ -40,11 +40,11 @@ public class Douglas extends Agente
 			// responsavel por encaminhar os grupos para suas devidas posicoes
 			MoveParaDestino(this.Destino);
 		}
-		if(this.cycleCounter % 20 == 0) {
+		if(this.cycleCounter % 10 == 0) {
 			this.Destino = EscolheDestino(this.group);
 		}
 
-		// se for para parar troca estado para idle
+		// se for para parar, troca estado para idle
 		if(this.parar) {
 			setDirecao(this.NENHUMA_DIRECAO);
 			return;
@@ -107,7 +107,6 @@ public class Douglas extends Agente
 
 			default:
 				setDirecao(this.NENHUMA_DIRECAO);
-				// this.goRandom();
 				break;
 		}
 		return Destino;
@@ -141,10 +140,6 @@ public class Douglas extends Agente
 		}
 	}
 
-	public void goRandom() {
-		setDirecao(geraDirecaoAleatoria());
-	}
-
 	public void recebeuEnergia() {
 		String msg = "E " + this.getX() + " " + this.getY();
 		enviaMensagem(msg);
@@ -165,7 +160,6 @@ public class Douglas extends Agente
 	}
 
 	public void recebeuMensagem(String msg) {
-		// System.out.println("recebi msg: "+ msg);
 		String array[] = new String[3];
 		array = msg.split(" ");
 
