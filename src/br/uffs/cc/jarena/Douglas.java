@@ -173,6 +173,6 @@ public class Douglas extends Agente
 	}
 
 	public String getEquipe() {
-		return "SELECAO ARTIFICIAL";
+		return "Hawking radiation";
 	}
 }
